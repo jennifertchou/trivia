@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Trivia</title>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+<link href="css/style.css" rel="stylesheet">
+
+<!-- Angular -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>
+<!-- Angular Animations -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.js"></script>
+<script src="js/main.js"></script>
+</head>
+
+<body ng-app="triviaApp" ng-controller="triviaCtrl">
+<div class="container">
+    <div class="jumbotron" ng-click="showNextQuestion()">
+        <p class="lead">{{ currentQuestion }}</p>
+        <br>
+        <div class="label label-primary" ng-click="showAnswer()" ng-hide="answerShown" 
+            ng-class="{fadeout: startFadeOut}"> Click to reveal answer </div>
+        <div class="label label-answer" ng-show="answerShown"> 
+            {{currentAnswer}} </div>
+    </div> <!-- jumbotron -->
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+</body>
+</html>

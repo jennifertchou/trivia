@@ -13,17 +13,12 @@ body {
     opacity: 0;
 }
 
-/* Customize container */
-@media (min-width: 768px) {
-  .container {
-    max-width: 730px;
-  }
-}
-.container-narrow > hr {
-  margin: 30px 0;
+.container {
+  max-width: 730px;
+  height: 200px; /* Preferred height */
 }
 
-/* Main marketing message and sign up button */
+
 .jumbotron {
   text-align: center;
   border-bottom: 1px solid #e5e5e5;

@@ -4,13 +4,31 @@ body {
   padding-bottom: 20px;
   padding-right: 15px;
   padding-left: 15px;
+  overflow-x: hidden; /* So it doesn't pop up during 
+                         slide in animation */
+}
+
+/* Fade in animation for answer */
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
 /* Fade out animation */
-.fadeout{
-    -webkit-transition: opacity 0.5s; /* For Safari 3.1 to 6.0 */
-    transition: opacity 0.5s;
-    opacity: 0;
+@keyframes fadeout {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+@keyframes slidein {
+  from {
+    margin-left: 100%;
+    width: 300%;
+  }
+  to {
+    margin-left: 0%;
+    width: 100%;
+  }
 }
 
 .container {
@@ -18,21 +36,35 @@ body {
   height: 200px; /* Preferred height */
 }
 
-
 .jumbotron {
   text-align: center;
   border-bottom: 1px solid #e5e5e5;
+  overflow: hidden;
+}
+
+.jumboanim {
+  animation: slidein 0.3s, fadein 1s;
+}
+
+.jumbotron .lead {
+  max-width: 580px;
 }
 
 .jumbotron .label {
   padding: 14px 24px;
   font-size: 21px;
+  max-width:1000px;
+}
+
+/* Fade out animation for answer cover */
+.fadeout{
+    animation: fadeout 0.5s;
 }
 
 .jumbotron .label-answer {
   background-color: transparent;
   color: #000000;
-  opacity: 0.8;
+  animation: fadein 0.4s;
 }
 
 

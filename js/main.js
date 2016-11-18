@@ -9,6 +9,11 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
   });
 
   $scope.updateQA = function(QA) {
+    $scope.startJumboAnim = true;
+    $timeout(function(){
+        $scope.startJumboAnim = false;
+      }, 500);
+
     $scope.QA = QA;
     $scope.currentQuestion = QA["question"];
     $scope.currentAnswer = QA["answer"]; 
@@ -30,7 +35,7 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
       $scope.startFadeOut = true;
       $timeout(function(){
         $scope.answerShown = true;
-      }, 500);
+      }, 300);
     }
   }
 

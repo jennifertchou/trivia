@@ -15,14 +15,15 @@
 
 <body ng-app="triviaApp" ng-controller="triviaCtrl" ng-keydown="key($event)">
 <div class="container">
-    <div class="jumbotron" ng-click="showNextQuestion()">
+    <div class="jumbotron" ng-click="showNextQuestion()" ng-class="{jumboanim: startJumboAnim}">
         <p class="lead">{{ currentQuestion }}</p>
         <br>
-        <div class="label label-primary" ng-click="showAnswer(); $event.stopPropagation();" ng-hide="answerShown" 
-            ng-class="{fadeout: startFadeOut}"> Click to reveal answer </div>
+        <div class="label label-primary" ng-click="showAnswer(); $event.stopPropagation();" ng-class="{fadeout: startFadeOut}" ng-hide="answerShown" 
+            > Click to reveal answer </div>
         <div class="label label-answer" ng-show="answerShown"> 
             {{currentAnswer}} </div>
     </div> <!-- jumbotron -->
+</div> <!-- container -->
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

@@ -11,14 +11,15 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
   $scope.updateQA = function(QA) {
     $scope.startJumboAnim = true;
     $timeout(function(){
-        $scope.startJumboAnim = false;
-      }, 500);
-
-    $scope.QA = QA;
-    $scope.currentQuestion = QA["question"];
-    $scope.currentAnswer = QA["answer"]; 
-    $scope.startFadeOut = false;
-    $scope.answerShown = false;
+      $scope.QA = QA;
+      $scope.currentQuestion = QA["question"];
+      $scope.currentAnswer = QA["answer"]; 
+      $scope.startFadeOut = false;
+      $scope.answerShown = false;
+    }, 300);
+    $timeout(function(){
+        $scope.startJumboAnim = false; 
+      }, 600);
   }
 
   $scope.showPrevQuestion = function() {

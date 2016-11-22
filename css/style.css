@@ -20,6 +20,12 @@ body {
     to   { opacity: 0; }
 }
 
+@keyframes fadeoutfadein {
+    0% { opacity: 1; }
+    50%   { opacity: 0; }
+    100%   { opacity: 1; }
+}
+
 @keyframes slidein {
   from {
     margin-left: 100%;
@@ -43,7 +49,7 @@ body {
 }
 
 .jumboanim {
-  animation: slidein 0.3s, fadein 1s;
+  animation: fadeoutfadein 0.6s;
 }
 
 .jumbotron .lead {
@@ -58,7 +64,7 @@ body {
 
 /* Fade out animation for answer cover */
 .fadeout{
-    animation: fadeout 0.5s;
+    animation: fadeout 0.7s;
 }
 
 .jumbotron .label-answer {

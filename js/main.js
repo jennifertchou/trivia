@@ -1,5 +1,7 @@
 var prevStack = []; // Stores previous QAs
 var nextStack = []; // Stores QAs that we need to restore
+var questionBookmarked = {}; // Dictionary that maps the question to whether 
+                        // or not it was bookmarked for when we see it again
 
 var app = angular.module('triviaApp', ['ngAnimate']);
 app.controller('triviaCtrl', function($scope, $http, $timeout) {
@@ -16,6 +18,8 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
       $scope.currentAnswer = QA["answer"]; 
       $scope.startFadeOut = false;
       $scope.answerShown = false;
+      $scope.saved = questionBookmarked[$scope.currentQuestion];
+      $scope.setStar($scope.saved); // Restore bookmarked state
     }, 300);
     $timeout(function(){
         $scope.startJumboAnim = false; 
@@ -43,6 +47,8 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
   $scope.showNextQuestion = function() {
     // Push current question/answer onto prevStack
     prevStack.push($scope.QA);
+    // Save info about whether or not the question was bookmarked
+    questionBookmarked[$scope.currentQuestion] = $scope.saved;
     // Check to see if there's stuff in nextStack to restore
     if (nextStack.length) {
       // Pop question off nextStack
@@ -57,6 +63,26 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
     return $scope.triviaData[index];
   }
 
+  $scope.toggleStar = function() {
+    if ($scope.saved) {
+      star.src = "images/emptystar.png";
+      $scope.saved = false;
+    } else {
+      star.src = "images/filledstar.png";
+      $scope.saved = true;
+    }
+  }
+
+
+  $scope.setStar = function(filled) {
+    var star = document.getElementById('star');
+    if (filled) {
+      star.src = "images/filledstar.png";
+    } else {
+      star.src = "images/emptystar.png";
+    }
+  }
+
   $scope.key = function($event){
       /* left 37, up 38, right 39, down 40*/
       if ($event.keyCode == 40 || $event.keyCode == 38) { // down/up
@@ -65,6 +91,8 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
           $scope.showNextQuestion();    
       } else if ($event.keyCode == 37) { //left
           $scope.showPrevQuestion();
+      } else if ($event.keyCode == 83) { //'s'
+          $scope.toggleStar();
       }
   }
 

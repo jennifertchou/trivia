@@ -15,7 +15,9 @@
 
 <body ng-app="triviaApp" ng-controller="triviaCtrl" ng-keydown="key($event)">
 <div class="container">
+    <div id="pageTitle">trivia</div>
     <div class="jumbotron" ng-click="showNextQuestion()" ng-class="{jumboanim: startJumboAnim}">
+        <img src="images/emptystar.png" id="star" ng-click="toggleStar(); $event.stopPropagation();">
         <p class="lead">{{ currentQuestion }}</p>
         <br>
         <div class="label label-primary" ng-click="showAnswer(); $event.stopPropagation();" ng-class="{fadeout: startFadeOut}" ng-hide="answerShown" 

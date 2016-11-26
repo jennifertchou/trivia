@@ -10,22 +10,36 @@
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>
 <!-- Angular Animations -->
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.js"></script>
+<!-- Underscore -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js"></script>
 <script src="js/main.js"></script>
 </head>
 
 <body ng-app="triviaApp" ng-controller="triviaCtrl" ng-keydown="key($event)">
 <div class="container">
     <div id="pageTitle">trivia</div>
-    <div class="jumbotron" ng-click="showNextQuestion()" ng-class="{jumboanim: startJumboAnim}">
-        <img src="images/emptystar.png" id="star" ng-click="toggleStar(); $event.stopPropagation();">
-        <p class="lead">{{ currentQuestion }}</p>
-        <br>
-        <div class="label label-primary" ng-click="showAnswer(); $event.stopPropagation();" ng-class="{fadeout: startFadeOut}" ng-hide="answerShown" 
-            > Click to reveal answer </div>
-        <div class="label label-answer" ng-show="answerShown"> 
-            {{currentAnswer}} </div>
-    </div> <!-- jumbotron -->
+    <ul class="nav nav-pills nav-justified">
+      <li id="random" role="presentation" class="active"> <a ng-click="showRandom()">random</a> </li>
+      <li id="starred" role="presentation"> <a ng-click="showStarred()">starred</a> </li>
+    </ul>
+    <br>
+    <div id="" class="row">
+        <div id="prev" class="arrow" ng-class="{transparent: !showPrevArrow}" ng-click="showPrevQuestion()"> <span class="glyphicon glyphicon-chevron-left"></span></div>
+        
+        <div class="jumbotron spring" ng-click="showNextQuestion()" ng-class="{jumboanim: startJumboAnim}">
+            <img src="images/emptystar.png" id="star" ng-click="toggleStar(); $event.stopPropagation();">
+            <p class="lead">{{ currentQuestion }}</p>
+            <br>
+            <div class="label dark-label" ng-click="showAnswer(); $event.stopPropagation();" ng-class="{fadeout: startFadeOut}" ng-hide="answerShown" 
+                > Click to reveal answer </div>
+            <div class="label label-answer" ng-show="answerShown"> 
+                {{currentAnswer}} </div>
+        </div> <!-- jumbotron -->
+
+        <div id="next" class="arrow" ng-class="{transparent: hideNextArrow}" ng-click="showNextQuestion()"> <span class="glyphicon glyphicon-chevron-right"></span></div>
+    </div> <!-- row -->
 </div> <!-- container -->
+
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

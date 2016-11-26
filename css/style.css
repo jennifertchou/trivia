@@ -1,27 +1,3 @@
-/* Space out content a bit */
-body {
-  padding-top: 20px;
-  padding-bottom: 20px;
-  padding-right: 15px;
-  padding-left: 15px;
-  /*overflow-x: hidden;*/ /* So it doesn't pop up during 
-                         slide in animation */           
-}
-
-#pageTitle {
-  text-align: center;
-  font-family: 'Lato', sans-serif;
-  font-size: 54px; font-weight: 300;
-}
-
-#star {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  max-width: 30px;
-  max-height: 30px;
-}
-
 /* Fade in animation for answer */
 @keyframes fadein {
     from { opacity: 0; }
@@ -51,9 +27,68 @@ body {
   }
 }
 
+/* Space out content a bit */
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-right: 15px;
+  padding-left: 15px;
+  text-align: center;         
+}
+
+a {
+  color: #192750; /* dark blue */
+}
+
+#pageTitle {
+  text-align: center;
+  font-family: 'Lato', sans-serif;
+  font-size: 54px; font-weight: 300;
+  color: #192750;
+}
+
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+  color: #e6eaf7;
+  background-color: #324C9D;
+}
+
+#star {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  max-width: 25px;
+  max-height: 25px;
+}
+
 .container {
   max-width: 730px;
   height: 200px; /* Preferred height */
+}
+
+.row {
+  max-width: 730px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.spring {
+  flex: 2; /* flex-grow, flex-shrink and flex-basis */
+}
+
+.glyphicon {
+  font-size: 40px;
+  color: #192750;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .jumbotron {
@@ -61,20 +96,16 @@ body {
   border-bottom: 1px solid #e5e5e5;
   overflow: hidden;
   position: relative; 
+  margin-bottom: 10px;
 }
 
 .jumboanim {
   animation: fadeoutfadein 0.6s;
 }
 
-.jumbotron .lead {
-  max-width: 580px;
-}
-
 .jumbotron .label {
   padding: 14px 24px;
   font-size: 21px;
-  max-width:1000px;
 }
 
 /* Fade out animation for answer cover */
@@ -88,4 +119,16 @@ body {
   animation: fadein 0.4s;
 }
 
+.dark-label {
+  background-color: #324C9D;
+  color: #e6eaf7; /* off white*/
+}
 
+.arrow {
+  max-width: 80px;
+  outline:none;
+}
+
+.transparent {
+  opacity: 0;
+}

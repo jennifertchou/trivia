@@ -1,14 +1,47 @@
 var prevStack = []; // Stores previous QAs
 var nextStack = []; // Stores QAs that we need to restore
-var questionBookmarked = {}; // Dictionary that maps the question to whether 
-                        // or not it was bookmarked for when we see it again
+var questionStarred = {}; // Dictionary that maps the question to whether 
+                        // or not it was starred for when we load it again
+var starredQAs = new Set(); // Set of QAs that are starred
+var showingStarred = false;
 
 var app = angular.module('triviaApp', ['ngAnimate']);
 app.controller('triviaCtrl', function($scope, $http, $timeout) {
+  // Load questions/answers from JSON
   $http.get('QA.json').then(function(response){
     $scope.triviaData = response.data;
     $scope.updateQA($scope.getRandomQA());
   });
+
+  $scope.showRandom = function() {
+    document.getElementById("random").className = "active";
+    document.getElementById("starred").className = "";
+    prevStack = [];
+    nextStack = [];
+    // Only reload question if you weren't already in random mode
+    if (showingStarred) {
+      $scope.updateQA($scope.getRandomQA());
+    }
+    showingStarred = false;
+  }
+
+  $scope.showStarred = function() {
+    document.getElementById("random").className = "";
+    document.getElementById("starred").className = "active";
+    
+    // Don't do anything if you're already in starred mode.
+    if (showingStarred) return;
+    showingStarred = true;
+    prevStack = [];
+    nextStack = Array.from(starredQAs);
+    if (nextStack.length) {
+      // Show first starred question
+      $scope.updateQA(nextStack.pop()); 
+    } else {
+      // Hide jumbotron and show "nothing is starred" message
+      //var jumbotron = document.getElementsByClassName("jumbotron")[0];
+    }
+  }
 
   $scope.updateQA = function(QA) {
     $scope.startJumboAnim = true;
@@ -18,9 +51,18 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
       $scope.currentAnswer = QA["answer"]; 
       $scope.startFadeOut = false;
       $scope.answerShown = false;
-      $scope.saved = questionBookmarked[$scope.currentQuestion];
-      $scope.setStar($scope.saved); // Restore bookmarked state
+      $scope.saved = false;
+      if ($scope.currentQuestion in questionStarred) {
+        $scope.saved = questionStarred[$scope.currentQuestion];
+      }
+      $scope.setStar($scope.saved); // Restore starred state
+      // Make prev arrow transparent if it's the first thing
+      $scope.showPrevArrow = prevStack.length;
+      // Make next arrow transparent if you're in starred mode and 
+      // nothing is left, else allow show next arrow in random mode
+      $scope.hideNextArrow = showingStarred ? !nextStack.length : false;
     }, 300);
+
     $timeout(function(){
         $scope.startJumboAnim = false; 
       }, 600);
@@ -45,16 +87,21 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
   }
 
   $scope.showNextQuestion = function() {
+    // Don't do anything if in starred mode and nothing's left
+    if (showingStarred && !nextStack.length) return;
+
     // Push current question/answer onto prevStack
     prevStack.push($scope.QA);
-    // Save info about whether or not the question was bookmarked
-    questionBookmarked[$scope.currentQuestion] = $scope.saved;
     // Check to see if there's stuff in nextStack to restore
     if (nextStack.length) {
       // Pop question off nextStack
       $scope.updateQA(nextStack.pop());
     } else {
-      $scope.updateQA($scope.getRandomQA());
+      // Get new random question (if not in the mode where we're
+      // only showing starred questions);
+      if (!showingStarred) {
+        $scope.updateQA($scope.getRandomQA());
+      }
     }
   }
 
@@ -64,23 +111,21 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
   }
 
   $scope.toggleStar = function() {
-    if ($scope.saved) {
-      star.src = "images/emptystar.png";
-      $scope.saved = false;
-    } else {
-      star.src = "images/filledstar.png";
-      $scope.saved = true;
-    }
+    $scope.saved = !$scope.saved;
+    $scope.setStar($scope.saved);
   }
 
-
-  $scope.setStar = function(filled) {
+  $scope.setStar = function(starred) {
     var star = document.getElementById('star');
-    if (filled) {
+    if (starred) {
       star.src = "images/filledstar.png";
+      starredQAs.add($scope.QA);
     } else {
       star.src = "images/emptystar.png";
+      starredQAs.delete($scope.QA);
     }
+    // Save info about whether or not the question was starred
+    questionStarred[$scope.currentQuestion] = starred;
   }
 
   $scope.key = function($event){

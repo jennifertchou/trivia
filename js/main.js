@@ -144,7 +144,7 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
 
   $scope.key = function($event){
       /* left 37, up 38, right 39, down 40*/
-      if ($event.keyCode == 40 || $event.keyCode == 38) { // down/up
+      if ($event.keyCode == 38) { // up
           $scope.showAnswer();
       } else if ($event.keyCode == 39) { // right
           $scope.showNextQuestion();    
@@ -152,6 +152,10 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
           $scope.showPrevQuestion();
       } else if ($event.keyCode == 83) { //'s'
           $scope.toggleStar();
+      } else if ($event.keyCode == 219) { //'['
+          $scope.showRandomMode();
+      } else if ($event.keyCode == 221) { //']'
+          $scope.showStarredMode();
       }
   }
 

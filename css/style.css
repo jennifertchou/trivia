@@ -16,43 +16,57 @@
     100%   { opacity: 1; }
 }
 
-@keyframes slidein {
-  from {
-    margin-left: 100%;
-    width: 300%;
-  }
-  to {
-    margin-left: 0%;
-    width: 100%;
-  }
-}
-
 /* Space out content a bit */
 body {
   padding-top: 20px;
   padding-bottom: 20px;
   padding-right: 15px;
   padding-left: 15px;
-  text-align: center;         
-}
-
-a {
-  color: #192750; /* dark blue */
-  background-color: #eee; /* light gray */
+  text-align: center;  
+  font-size: 16px;       
 }
 
 #pageTitle {
   text-align: center;
   font-family: 'Lato', sans-serif;
   font-size: 54px; font-weight: 300;
-  color: #192750;
+  color: #192750; /* dark blue */
+}
+
+.glyphicon {
+  color: #192750; /* dark blue */
+}
+
+.glyphicon:hover {
+  color: #2a4084; /* lighter */;
+}
+
+#help { /* upper right corner */
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+#help > .glyphicon {
+  font-size: 20px;
 }
 
 .nav-pills > li.active > a,
 .nav-pills > li.active > a:hover,
 .nav-pills > li.active > a:focus {
-  color: #e6eaf7;
-  background-color: #324C9D;
+  color: #e6eaf7; /* off white */
+  background-color: #324C9D; /* blue */
+}
+
+.nav-pills > li > a {
+  color: #192750; /* dark blue */
+  background-color: #eee; /* light gray */
+}
+
+.nav-pills > li > a:hover,
+.nav-pills > li > a:focus {
+  color: #192750; /* dark blue */
+  background-color: #e2e2e2; /* not as light gray */
 }
 
 #star {
@@ -80,9 +94,8 @@ a {
   flex: 2; /* flex-grow, flex-shrink and flex-basis */
 }
 
-.glyphicon {
+.arrow > .glyphicon {
   font-size: 40px;
-  color: #192750;
 }
 
 .column {
@@ -121,8 +134,12 @@ a {
 }
 
 .dark-label {
-  background-color: #324C9D;
+  background-color: #324C9D; /* blue */
   color: #e6eaf7; /* off white*/
+}
+
+.dark-label:hover {
+  background-color: #2a4084; /* darker */
 }
 
 .arrow {

@@ -97,6 +97,7 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
       $scope.startFadeOut = true;
       $timeout(function(){
         $scope.answerShown = true;
+        // Start animating next arrow
       }, 300);
     }
   }

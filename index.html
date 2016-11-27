@@ -18,29 +18,43 @@
 <body ng-app="triviaApp" ng-controller="triviaCtrl" ng-keydown="key($event)">
 <div class="container">
     <div id="pageTitle">trivia</div>
+    <div id="help"> 
+        <span class="glyphicon glyphicon-question-sign"></span>
+    </div>
     <ul class="nav nav-pills nav-justified">
-      <li id="random" role="presentation" class="active"> <a ng-click="showRandomMode()">random</a> </li>
-      <li id="starred" role="presentation"> <a ng-click="showStarredMode()">starred</a> </li>
+        <li id="random" role="presentation" class="active"> 
+            <a ng-click="showRandomMode()">random</a> 
+        </li>
+        <li id="starred" role="presentation"> 
+            <a ng-click="showStarredMode()">starred</a> 
+        </li>
     </ul>
     <br>
     <div class="row" ng-hide="noStarredQuestions">
-        <div id="prev" class="arrow" ng-class="{transparent: !showPrevArrow}" ng-click="showPrevQuestion()"> <span class="glyphicon glyphicon-chevron-left"></span></div>
-        
+        <div id="prev" class="arrow" ng-class="{transparent: !showPrevArrow}" 
+            ng-click="showPrevQuestion()"> 
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </div>
         <div class="jumbotron spring" ng-class="{jumboanim: startJumboAnim}">
             <img src="images/emptystar.png" id="star" ng-click="toggleStar();">
             <p class="lead">{{ currentQuestion }}</p>
             <br>
-            <div class="label dark-label" ng-click="showAnswer();" ng-class="{fadeout: startFadeOut}" ng-hide="answerShown" 
-                > Click to reveal answer </div>
+            <div class="label dark-label" ng-click="showAnswer();" 
+            ng-class="{fadeout: startFadeOut}" ng-hide="answerShown"> 
+                Click to reveal answer 
+            </div>
             <div class="label label-answer" ng-show="answerShown"> 
-                {{currentAnswer}} </div>
+                {{currentAnswer}} 
+            </div>
         </div> <!-- jumbotron -->
-
-        <div id="next" class="arrow" ng-class="{transparent: hideNextArrow}" ng-click="showNextQuestion()"> <span class="glyphicon glyphicon-chevron-right"></span></div>
+        <div id="next" class="arrow" ng-class="{transparent: hideNextArrow}" 
+            ng-click="showNextQuestion()"> 
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </div>
     </div> <!-- row -->
 
     <div ng-show="noStarredQuestions"> <br>
-        <p class="lead">No questions are starred</p> 
+        <p>No questions are starred</p> 
     </div>
 </div> <!-- container -->
 

@@ -4,6 +4,9 @@ var questionStarred = {}; // Dictionary that maps the question to whether
                         // or not it was starred for when we load it again
 var starredQAs = new Set(); // Set of QAs that are starred
 var showingStarred = false;
+var oldPrevStack;
+var oldNextStack;
+var oldQA;
 
 var app = angular.module('triviaApp', ['ngAnimate']);
 app.controller('triviaCtrl', function($scope, $http, $timeout) {
@@ -13,25 +16,33 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
     $scope.updateQA($scope.getRandomQA());
   });
 
-  $scope.showRandom = function() {
+  /* Go into random mode */
+  $scope.showRandomMode = function() {
     document.getElementById("random").className = "active";
     document.getElementById("starred").className = "";
-    prevStack = [];
-    nextStack = [];
-    // Only reload question if you weren't already in random mode
-    if (showingStarred) {
-      $scope.updateQA($scope.getRandomQA());
-    }
+
+  // Don't do anything if you're already in random mode.
+    if (!showingStarred) return;
+
+    prevStack = oldPrevStack;
+    nextStack = oldNextStack;
+    $scope.updateQA(oldQA);
     showingStarred = false;
+    $scope.noStarredQuestions = false;
   }
 
-  $scope.showStarred = function() {
+  /* Go in starred mode */
+  $scope.showStarredMode = function() {
     document.getElementById("random").className = "";
     document.getElementById("starred").className = "active";
-    
     // Don't do anything if you're already in starred mode.
     if (showingStarred) return;
     showingStarred = true;
+    // Save prevStack and nextStack to restore in random mode
+    oldPrevStack = prevStack;
+    oldNextStack = nextStack;
+    oldQA = $scope.QA;
+
     prevStack = [];
     nextStack = Array.from(starredQAs);
     if (nextStack.length) {
@@ -39,14 +50,16 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
       $scope.updateQA(nextStack.pop()); 
     } else {
       // Hide jumbotron and show "nothing is starred" message
-      //var jumbotron = document.getElementsByClassName("jumbotron")[0];
+      $scope.noStarredQuestions = true;      
     }
   }
 
+  /* Updates the GUI and $scope variables */
   $scope.updateQA = function(QA) {
     $scope.startJumboAnim = true;
+    $scope.QA = QA;
+    // Timeout so the question changes after the jumbotron fades out
     $timeout(function(){
-      $scope.QA = QA;
       $scope.currentQuestion = QA["question"];
       $scope.currentAnswer = QA["answer"]; 
       $scope.startFadeOut = false;
@@ -63,9 +76,10 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
       $scope.hideNextArrow = showingStarred ? !nextStack.length : false;
     }, 300);
 
+    // The animation is over in 600 ms
     $timeout(function(){
-        $scope.startJumboAnim = false; 
-      }, 600);
+      $scope.startJumboAnim = false; 
+    }, 600);
   }
 
   $scope.showPrevQuestion = function() {
@@ -89,7 +103,6 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
   $scope.showNextQuestion = function() {
     // Don't do anything if in starred mode and nothing's left
     if (showingStarred && !nextStack.length) return;
-
     // Push current question/answer onto prevStack
     prevStack.push($scope.QA);
     // Check to see if there's stuff in nextStack to restore

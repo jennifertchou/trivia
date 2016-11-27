@@ -38,6 +38,7 @@ body {
 
 a {
   color: #192750; /* dark blue */
+  background-color: #eee; /* light gray */
 }
 
 #pageTitle {

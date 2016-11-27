@@ -4,6 +4,7 @@ var questionStarred = {}; // Dictionary that maps the question to whether
                         // or not it was starred for when we load it again
 var starredQAs = new Set(); // Set of QAs that are starred
 var showingStarred = false;
+// Used to save the state when going out of random mode
 var oldPrevStack;
 var oldNextStack;
 var oldQA;
@@ -50,7 +51,7 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
       $scope.updateQA(nextStack.pop()); 
     } else {
       // Hide jumbotron and show "nothing is starred" message
-      $scope.noStarredQuestions = true;      
+      $scope.noStarredQuestions = true; 
     }
   }
 

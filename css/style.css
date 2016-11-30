@@ -23,10 +23,10 @@ body {
   padding-right: 15px;
   padding-left: 15px;
   text-align: center;  
-  font-size: 16px;       
+  font-size: 16px;     
 }
 
-#pageTitle {
+h1 {
   text-align: center;
   font-family: 'Lato', sans-serif;
   font-size: 54px; font-weight: 300;
@@ -38,17 +38,37 @@ body {
 }
 
 .glyphicon:hover {
-  color: #2a4084; /* lighter */;
+  color: #324C9D; /* blue */
 }
 
 #help { /* upper right corner */
   position: absolute;
   top: 10px;
   right: 10px;
+  font-size: 20px;
+  outline: none;
 }
 
-#help > .glyphicon {
-  font-size: 20px;
+#helpMenu {
+  background-color: #eee; /* light gray */
+  padding: 14px 24px;
+  position: relative;
+  outline: none;
+}
+
+/* The X Button */
+.closeX {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #000; /* black */
+  outline: none;
+}
+
+.closeX:hover {
+  color: #324C9D; /* blue */
 }
 
 .nav-pills > li.active > a,
@@ -75,6 +95,7 @@ body {
   right: 8px;
   max-width: 25px;
   max-height: 25px;
+  outline: none;
 }
 
 .container {
@@ -94,7 +115,7 @@ body {
   flex: 2; /* flex-grow, flex-shrink and flex-basis */
 }
 
-.arrow > .glyphicon {
+.arrow {
   font-size: 40px;
 }
 
@@ -139,14 +160,15 @@ body {
 }
 
 .dark-label:hover {
-  background-color: #2a4084; /* darker */
+  background-color: #2a4084; /* dark blue */
 }
 
 .arrow {
   max-width: 80px;
-  outline:none;
+  outline: none;
 }
 
+/* Hides the div but still maintains layout of everything else*/
 .transparent {
-  opacity: 0;
+  visibility: hidden;
 }

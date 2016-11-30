@@ -17,6 +17,11 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
     $scope.updateQA($scope.getRandomQA());
   });
 
+  /* Show help menu (shortcuts) */
+  $scope.showHelpMenu = function() {
+
+  }
+
   /* Go into random mode */
   $scope.showRandomMode = function() {
     document.getElementById("random").className = "active";
@@ -134,9 +139,13 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
     var star = document.getElementById('star');
     if (starred) {
       star.src = "images/filledstar.png";
+      star.alt = "filledstar";
+      star.arialabel = "filledstar";
       starredQAs.add($scope.QA);
     } else {
       star.src = "images/emptystar.png";
+      star.alt = "emptystar";
+      star.arialabel = "emptystar";
       starredQAs.delete($scope.QA);
     }
     // Save info about whether or not the question was starred
@@ -159,6 +168,17 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
           $scope.showStarredMode();
       }
   }
-
 });
+
+$(document).ready(function(){
+    $('#helpMenu').hide();
+    $("#help").click(function(){
+        $("#helpMenu").slideDown();
+        $("#helpMenu").focus();
+    });
+    $(".closeX").click(function(){
+        $("#helpMenu").slideUp();
+    });
+});
+
 

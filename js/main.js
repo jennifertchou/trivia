@@ -12,16 +12,16 @@ var oldQA;
 var app = angular.module('triviaApp', ['ngAnimate']);
 app.controller('triviaCtrl', function($scope, $http, $timeout) {
   // Load questions/answers from JSON
-  $http.get('QA.json').then(function(response){
+  // $http.get('QA.json').then(function(response){
+  //   $scope.triviaData = response.data;
+  //   $scope.updateQA($scope.getRandomQA());
+  // });
+
+  $http.get('http://jservice.io/api/clues').then(function(response){
     $scope.triviaData = response.data;
     $scope.updateQA($scope.getRandomQA());
   });
-
-  /* Show help menu (shortcuts) */
-  $scope.showHelpMenu = function() {
-
-  }
-
+  
   /* Go into random mode */
   $scope.showRandomMode = function() {
     document.getElementById("random").className = "active";

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <title>Trivia</title>
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
@@ -51,7 +51,7 @@
             <img alt="emptystar" aria-label="emptystar" role="button" src="images/emptystar.png" id="star" ng-click="toggleStar();" tabindex="0">
             <p class="lead" tabindex="0">{{ currentQuestion }}</p>
             <br>
-            <div class="label dark-label" role="button" ng-click="showAnswer();" 
+            <div id="answercover" class="label dark-label" role="button" ng-click="showAnswer();" 
             ng-class="{fadeout: startFadeOut}" ng-hide="answerShown" tabindex="0"> 
                 Click to reveal answer 
             </div>

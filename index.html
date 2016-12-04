@@ -68,7 +68,7 @@
         </li>
     </ul>
     <br>
-    <div class="row" ng-hide="noStarredQuestions">
+    <div class="row" ng-hide="!ready || noStarredQuestions">
         <div id="prev" class="arrow glyphicon glyphicon-chevron-left" role="button" 
             aria-label="leftarrow" ng-class="{transparent: !showPrevArrow}"
             ng-click="showPrevQuestion()" tabindex="0"> 

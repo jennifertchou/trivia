@@ -13,9 +13,19 @@ var oldQA;
 
 var app = angular.module('triviaApp', ['ngAnimate']);
 app.controller('triviaCtrl', function($scope, $http, $timeout) {
-  $http.get('http://jservice.io/api/random?count=100').then(function(response){
+  $scope.ready = false;
+  // Load 1 random question first so it shows up immediately
+  $http.get('http://jservice.io/api/random').then(function(response){
     $scope.triviaData = response.data;
     updateQA(getRandomQA());
+    // Give time for GUI to update
+    $timeout(function(){
+      $scope.ready = true;
+    }, 300);
+  });
+  // Then get more questions
+  $http.get('http://jservice.io/api/random?count=100').then(function(response){
+    $scope.triviaData = $scope.triviaData.concat(response.data);
   });
 
   /* Go into random mode */
@@ -58,7 +68,10 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
 
   /* Updates the GUI and $scope variables */
   var updateQA = function(QA) {
-    $scope.startJumboAnim = true;
+    // Don't do animation at the very beginning of loading the page
+    if (prevStack.length + nextStack.length != 0) {
+      $scope.startJumboAnim = true;
+    }
     $scope.QA = QA;
     // Timeout so the question changes after the jumbotron fades out
     $timeout(function(){
@@ -123,7 +136,6 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
   }
 
   var getRandomQA = function() {
-    console.log($scope.triviaData.length);
     var index = Math.floor(Math.random() * $scope.triviaData.length);
     var randomQA = $scope.triviaData[index];
     // For some reason, some questions are "" in the jService API
@@ -174,9 +186,6 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
     // Update trivia data for future questions
     if (!updateRequested) {
       $timeout(function(){
-          console.log("updating with ");
-          for (let item of selectedDifficulties) {console.log(item);}
-
           updateTriviaData();
           updateRequested = false;
         }, 1000);

@@ -4,6 +4,7 @@ var questionStarred = {}; // Dictionary that maps the question to whether
                         // or not it was starred for when we load it again
 var starredQAs = new Set(); // Set of QAs that are starred
 var selectedDifficulties = new Set([100,200,400,600,800,1000]); // Set of difficulties selected
+var updateRequested = false; // Flag to prevent concurrency issues with updating difficulties
 var showingStarred = false;
 // Used to save the state when going out of random mode
 var oldPrevStack;
@@ -133,7 +134,6 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
     // Some answers are "<i> answer </i>" in the jService API
     randomQA["answer"] = 
       randomQA["answer"].split("<i>").join("").split("</i>").join("");
-    console.log(randomQA["category"]["title"]);
     return randomQA;
   }
 
@@ -172,7 +172,17 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
         $event.currentTarget.innerHTML + " selected");
     }
     // Update trivia data for future questions
-    updateTriviaData();
+    if (!updateRequested) {
+      $timeout(function(){
+          console.log("updating with ");
+          for (let item of selectedDifficulties) {console.log(item);}
+
+          updateTriviaData();
+          updateRequested = false;
+        }, 1000);
+    }
+    updateRequested = true;
+    
       
   }
 

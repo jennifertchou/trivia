@@ -20,8 +20,7 @@
 <body ng-app="triviaApp" ng-controller="triviaCtrl" ng-keydown="key($event)">
 <div class="container">
     <!-- Help menu hidden initially with jQuery -->
-    <div id="helpMenu" tabindex="0"> 
-        <span class="closeX" role="button" tabindex="0">x</span>
+    <div id="helpMenu" class="menu" tabindex="0"> 
         <b>Keyboard Shortcuts</b> <br> 
         &larr; : Previous Question <br>
         &uarr; : Reveal Answer <br>
@@ -29,9 +28,36 @@
         s : Star Question <br>
         [ : Random Mode <br>
         ] : Starred Mode <br>
+        <span id="closeHelp" class="closeX" role="button" tabindex="0">x</span>
+    </div>
+    <!-- Settings menu hidden initially with jQuery -->
+    <div id="settingsMenu" class="menu" tabindex="0"> 
+        <b>Settings</b> <br> 
+        Select Difficulties: 
+        <div class="label label-success" role="button" tabindex="0"
+            ng-click="toggleDifficulty($event,100)" 
+            aria-label="100 selected">100</div>
+        <div class="label label-success" role="button" tabindex="0"
+            ng-click="toggleDifficulty($event,200)"
+            aria-label="200 selected">200</div>
+        <div class="label label-success" role="button" tabindex="0"
+            ng-click="toggleDifficulty($event,400)"
+            aria-label="400 selected">400</div>
+        <div class="label label-success" role="button" tabindex="0"
+            ng-click="toggleDifficulty($event,600)"
+            aria-label="600 selected">600</div>
+        <div class="label label-success" role="button" tabindex="0"
+            ng-click="toggleDifficulty($event,800)"
+            aria-label="800 selected">800</div>
+        <div class="label label-success" role="button" tabindex="0"
+            ng-click="toggleDifficulty($event,1000)"
+            aria-label="1000 selected">1000</div>
+        <span id="closeSettings" class="closeX" role="button" tabindex="0">x</span>
     </div>
     <div id="pageTitle"><h1>trivia</h1></div>
-    <div id="help" role="button" ng-click="showHelpMenu()" class="glyphicon glyphicon-question-sign" aria-label="help" tabindex="0">
+    <div id="help" role="button" class="glyphicon glyphicon-question-sign" aria-label="help" tabindex="0">
+    </div>
+    <div id="settings" role="button" class="glyphicon glyphicon-cog" aria-label="settings" tabindex="0">
     </div>
     <ul class="nav nav-pills nav-justified">
         <li id="random" role="presentation" class="active"> 
@@ -49,6 +75,7 @@
         </div>
         <div class="jumbotron spring" ng-class="{jumboanim: startJumboAnim}">
             <img alt="emptystar" aria-label="emptystar" role="button" src="images/emptystar.png" id="star" ng-click="toggleStar();" tabindex="0">
+            <p id="categorylabel" tabindex="0"><i>Category: <b>{{ currentCategory }}</b></i></p>
             <p class="lead" tabindex="0">{{ currentQuestion }}</p>
             <br>
             <div id="answercover" class="label dark-label" role="button" ng-click="showAnswer();" 

@@ -3,6 +3,7 @@ var nextStack = []; // Stores QAs that we need to restore
 var questionStarred = {}; // Dictionary that maps the question to whether 
                         // or not it was starred for when we load it again
 var starredQAs = new Set(); // Set of QAs that are starred
+var selectedDifficulties = new Set([100,200,400,600,800,1000]); // Set of difficulties selected
 var showingStarred = false;
 // Used to save the state when going out of random mode
 var oldPrevStack;
@@ -11,17 +12,11 @@ var oldQA;
 
 var app = angular.module('triviaApp', ['ngAnimate']);
 app.controller('triviaCtrl', function($scope, $http, $timeout) {
-  // Load questions/answers from JSON
-  // $http.get('QA.json').then(function(response){
-  //   $scope.triviaData = response.data;
-  //   $scope.updateQA($scope.getRandomQA());
-  // });
-
-  $http.get('http://jservice.io/api/clues').then(function(response){
+  $http.get('http://jservice.io/api/random?count=100').then(function(response){
     $scope.triviaData = response.data;
-    $scope.updateQA($scope.getRandomQA());
+    updateQA(getRandomQA());
   });
-  
+
   /* Go into random mode */
   $scope.showRandomMode = function() {
     document.getElementById("random").className = "active";
@@ -32,7 +27,7 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
 
     prevStack = oldPrevStack;
     nextStack = oldNextStack;
-    $scope.updateQA(oldQA);
+    updateQA(oldQA);
     showingStarred = false;
     $scope.noStarredQuestions = false;
   }
@@ -53,7 +48,7 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
     nextStack = Array.from(starredQAs);
     if (nextStack.length) {
       // Show first starred question
-      $scope.updateQA(nextStack.pop()); 
+      updateQA(nextStack.pop()); 
     } else {
       // Hide jumbotron and show "nothing is starred" message
       $scope.noStarredQuestions = true; 
@@ -61,13 +56,14 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
   }
 
   /* Updates the GUI and $scope variables */
-  $scope.updateQA = function(QA) {
+  var updateQA = function(QA) {
     $scope.startJumboAnim = true;
     $scope.QA = QA;
     // Timeout so the question changes after the jumbotron fades out
     $timeout(function(){
       $scope.currentQuestion = QA["question"];
       $scope.currentAnswer = QA["answer"]; 
+      $scope.currentCategory = QA["category"]["title"];
       $scope.startFadeOut = false;
       $scope.answerShown = false;
       $scope.saved = false;
@@ -93,7 +89,7 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
       // Push current question/answer to nextStack to restore later
       nextStack.push($scope.QA);
       // Pop previous question/answer from prevStack and display it
-      $scope.updateQA(prevStack.pop());
+      updateQA(prevStack.pop());
     }
   }
 
@@ -115,19 +111,30 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
     // Check to see if there's stuff in nextStack to restore
     if (nextStack.length) {
       // Pop question off nextStack
-      $scope.updateQA(nextStack.pop());
+      updateQA(nextStack.pop());
     } else {
       // Get new random question (if not in the mode where we're
       // only showing starred questions);
       if (!showingStarred) {
-        $scope.updateQA($scope.getRandomQA());
+        updateQA(getRandomQA());
       }
     }
   }
 
-  $scope.getRandomQA = function() {
+  var getRandomQA = function() {
+    console.log($scope.triviaData.length);
     var index = Math.floor(Math.random() * $scope.triviaData.length);
-    return $scope.triviaData[index];
+    var randomQA = $scope.triviaData[index];
+    // For some reason, some questions are "" in the jService API
+    while (randomQA["question"] == "") {
+      index = Math.floor(Math.random() * $scope.triviaData.length);
+      randomQA = $scope.triviaData[index];
+    }
+    // Some answers are "<i> answer </i>" in the jService API
+    randomQA["answer"] = 
+      randomQA["answer"].split("<i>").join("").split("</i>").join("");
+    console.log(randomQA["category"]["title"]);
+    return randomQA;
   }
 
   $scope.toggleStar = function() {
@@ -140,16 +147,55 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
     if (starred) {
       star.src = "images/filledstar.png";
       star.alt = "filledstar";
-      star.arialabel = "filledstar";
+      star.setAttribute("aria-label","filledstar");
       starredQAs.add($scope.QA);
     } else {
       star.src = "images/emptystar.png";
       star.alt = "emptystar";
-      star.arialabel = "emptystar";
+      star.setAttribute("aria-label","emptystar");
       starredQAs.delete($scope.QA);
     }
     // Save info about whether or not the question was starred
     questionStarred[$scope.currentQuestion] = starred;
+  }
+
+  $scope.toggleDifficulty = function($event, value) {
+    if (selectedDifficulties.has(value)) {
+      selectedDifficulties.delete(value);
+      $event.currentTarget.className = "label label-default";
+      $event.currentTarget.setAttribute("aria-label", 
+        $event.currentTarget.innerHTML + " not selected");
+    } else {
+      selectedDifficulties.add(value);
+      $event.currentTarget.className = "label label-success";
+      $event.currentTarget.setAttribute("aria-label", 
+        $event.currentTarget.innerHTML + " selected");
+    }
+    // Update trivia data for future questions
+    updateTriviaData();
+      
+  }
+
+  var updateTriviaData = function() {
+    // Just keep a random question so triviaData isn't empty 
+    // before the API call finishes and the user clicks next.
+    $scope.triviaData = [$scope.triviaData[0]];
+
+    if (selectedDifficulties.size == 0) {
+      // Just get random questions
+      $http.get('http://jservice.io/api/random?count=100').then(function(response){
+        $scope.triviaData = response.data;
+      });
+    }
+
+    for (let value of selectedDifficulties) {
+      var randomOffset = Math.floor(Math.random() * 10000);
+      var url = "http://jservice.io/api/clues?offset=" + randomOffset 
+                    + "&value=" + value;
+      $http.get(url).then(function(response){
+        $scope.triviaData = $scope.triviaData.concat(response.data);
+      });
+    }
   }
 
   $scope.key = function($event){
@@ -172,12 +218,28 @@ app.controller('triviaCtrl', function($scope, $http, $timeout) {
 
 $(document).ready(function(){
     $('#helpMenu').hide();
+    $('#settingsMenu').hide();
     $("#help").click(function(){
-        $("#helpMenu").slideDown();
-        $("#helpMenu").focus();
+        if ($('#helpMenu').is(":visible")) {
+          $("#helpMenu").slideUp();
+        } else {
+          $("#helpMenu").slideDown();
+          $("#helpMenu").focus();
+        }
     });
-    $(".closeX").click(function(){
+    $("#settings").click(function(){
+        if ($('#settingsMenu').is(":visible")) {
+          $("#settingsMenu").slideUp();
+        } else {
+          $("#settingsMenu").slideDown();
+          $("#settingsMenu").focus();
+        }
+    });
+    $("#closeHelp").click(function(){
         $("#helpMenu").slideUp();
+    });
+    $("#closeSettings").click(function(){
+        $("#settingsMenu").slideUp();
     });
 });
 

@@ -35,6 +35,8 @@ h1 {
 
 .glyphicon {
   color: #192750; /* dark blue */
+  font-size: 20px;
+  outline: none;
 }
 
 .glyphicon:hover {
@@ -44,13 +46,18 @@ h1 {
 #help { /* upper right corner */
   position: absolute;
   top: 10px;
-  right: 10px;
-  font-size: 20px;
-  outline: none;
+  right: 40px;
 }
 
-#helpMenu {
+#settings { /* upper right corner */
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.menu {
   background-color: #eee; /* light gray */
+  margin-top: 15px;
   padding: 14px 24px;
   position: relative;
   outline: none;
@@ -95,6 +102,11 @@ h1 {
   right: 8px;
   max-width: 25px;
   max-height: 25px;
+  outline: none;
+}
+
+#categorylabel {
+  font-size:16px;
   outline: none;
 }
 
@@ -165,7 +177,6 @@ h1 {
 
 .arrow {
   max-width: 80px;
-  outline: none;
 }
 
 /* Hides the div but still maintains layout of everything else*/
